@@ -13,13 +13,16 @@
       </div>
 
 
-      <q-input
+      <input
         filled
         v-model="message"
+        v-autofocus
         @keyup.esc="clearMessage()"
         @keyup.enter="alertMessage()"
         label="Your name *"
         lazy-rules
+        ref="messageInput"
+        :style="errorStyle"
         :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
 
@@ -51,7 +54,17 @@ export default {
     messageUppercase(){
       console.log('ini fungsi uppercase')
       return this.message.toUpperCase()
+    },
+    errorStyle() {
+    if (this.message.length > 2) { // Memastikan this.message ada dan memiliki panjang lebih dari 20
+      return {
+        'color': 'red',
+        'background': 'pink',
+      }
     }
+    return null;
+  }
+
   },
   methods: {
     clearMessage(){
@@ -65,12 +78,29 @@ export default {
     messageLowercase(value) {
       return value.toLowerCase()
     }
-  }
+  },
+  directives: {
+    autofocus:{
+      inserted(el){
+        el.focus()
+      }
+    }
+  },
+  mounted(){
+    console.log(this.$refs.messageInput.className ="bg-green")
+  },
 }
 </script>
 
 <style>
 .border-gray{
   border: 1px solid grey;
+}
+input, button{
+  font-size: 23px;
+}
+.error{
+  color:red;
+  background: pink;
 }
 </style>
